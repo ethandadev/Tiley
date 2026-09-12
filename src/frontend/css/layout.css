@@ -1,0 +1,219 @@
+/* Application shell: menubar, three-column workspace, toolbar, statusbar. */
+
+.app {
+  display: grid;
+  grid-template-rows: var(--menubar-height) 1fr var(--toolbar-height) var(--statusbar-height);
+  height: 100vh;
+}
+
+/* ------------------------------------------------------------- menubar --- */
+
+.menubar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-3);
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+}
+.brand:hover { background: var(--surface-2); }
+
+.menus { display: flex; gap: 2px; }
+
+.menubar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.project-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 32ch;
+}
+
+/* ----------------------------------------------------------- workspace --- */
+
+.workspace {
+  display: grid;
+  grid-template-columns: var(--panel-width) minmax(0, 1fr) var(--panel-width);
+  min-height: 0;
+  background: var(--surface-0);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--surface-1);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.panel-left { border-right: 1px solid var(--border); }
+.panel-right { border-left: 1px solid var(--border); }
+
+.panel-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-3) var(--space-2);
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-body { padding: var(--space-3); display: grid; gap: var(--space-3); }
+
+.canvas-area {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  background: var(--canvas-bg);
+  overflow: hidden;
+}
+
+#map-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  touch-action: none;
+}
+#map-canvas.panning { cursor: grabbing; }
+#map-canvas.pannable { cursor: grab; }
+
+
+.zoom-controls {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.zoom-readout {
+  min-width: 62px;
+  padding: 4px 6px;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.zoom-readout:hover { background: var(--surface-hover); }
+
+/* ------------------------------------------------------------- toolbar --- */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-3);
+  background: var(--surface-1);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.toolbar-separator {
+  width: 1px;
+  height: 22px;
+  margin: 0 var(--space-2);
+  background: var(--border);
+  flex: none;
+}
+
+/* ----------------------------------------------------------- statusbar --- */
+
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-3);
+  background: var(--surface-1);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+.status-right { margin-left: auto; }
+
+/* ------------------------------------------------------------- welcome --- */
+
+.welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow-y: auto;
+  background: var(--surface-0);
+}
+
+.welcome-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-4) 64px;
+  display: grid;
+  gap: var(--space-5);
+}
+
+.welcome-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.welcome-actions { margin-left: auto; display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+.welcome-section { display: grid; gap: var(--space-3); }
+.welcome-section-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-3);
+}
+
+.loading {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--surface-0);
+  color: var(--text-muted);
+  z-index: 100;
+}
+
+/* Narrower desktops: the side panels shrink before the canvas does. */
+@media (max-width: 1280px) {
+  :root { --panel-width: 224px; }
+}
+@media (max-width: 1040px) {
+  .workspace { grid-template-columns: 200px minmax(0, 1fr) 220px; }
+  .statusbar { font-size: 12px; gap: var(--space-3); }
+}

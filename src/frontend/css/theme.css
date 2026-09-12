@@ -1,0 +1,147 @@
+/*
+ * Design tokens.
+ *
+ * Every colour, radius and spacing step used anywhere in the application is
+ * defined here as a custom property. The dark theme is the default; the light
+ * theme only overrides the token values, so no component rule needs to know
+ * which theme is active.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* Surfaces, from furthest back to closest to the user. */
+  --surface-0: #0d1017;
+  --surface-1: #141822;
+  --surface-2: #1b2030;
+  --surface-3: #232a3c;
+  --surface-hover: #2b3349;
+  --canvas-bg: #0a0c12;
+  --canvas-empty: #171c28;
+
+  --border: #2a3145;
+  --border-strong: #3a4359;
+
+  --text: #e6e9f2;
+  --text-muted: #98a1b8;
+  --text-faint: #6b7488;
+
+  --accent: #5b9dff;
+  --accent-strong: #3d84f0;
+  --accent-contrast: #06152b;
+  --accent-soft: rgba(91, 157, 255, 0.16);
+
+  --success: #4cc38a;
+  --warning: #e0a63d;
+  --danger: #f0685f;
+  --danger-soft: rgba(240, 104, 95, 0.16);
+
+  --grid-line: #3a4152;
+  --selection: #5b9dff;
+  --missing: #f0685f;
+
+  --radius-sm: 4px;
+  --radius: 7px;
+  --radius-lg: 12px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --menubar-height: 40px;
+  --toolbar-height: 46px;
+  --statusbar-height: 28px;
+  --panel-width: 260px;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --surface-0: #f2f4f8;
+  --surface-1: #ffffff;
+  --surface-2: #eef1f6;
+  --surface-3: #e3e8f0;
+  --surface-hover: #dae1ec;
+  --canvas-bg: #e9edf4;
+  --canvas-empty: #ffffff;
+
+  --border: #d2d9e4;
+  --border-strong: #b4becd;
+
+  --text: #161c26;
+  --text-muted: #5a6579;
+  --text-faint: #8a94a6;
+
+  --accent: #1f6feb;
+  --accent-strong: #1559c4;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(31, 111, 235, 0.12);
+
+  --success: #1f8a52;
+  --warning: #9a6500;
+  --danger: #c5352b;
+  --danger-soft: rgba(197, 53, 43, 0.12);
+
+  --grid-line: #b9c2d0;
+
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/*
+ * Several components set `display`, which would otherwise beat the user-agent
+ * rule for [hidden]. Toggling `.hidden = true` must always win.
+ */
+[hidden] { display: none !important; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--surface-0);
+  overflow: hidden;
+}
+
+h1, h2, h3 { margin: 0; font-weight: 600; }
+h1 { font-size: 22px; }
+h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.muted { color: var(--text-muted); }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }

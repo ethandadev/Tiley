@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tiley — Tilemap Editor</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/icon.svg">
+  <link rel="stylesheet" href="/frontend/css/theme.css">
+  <link rel="stylesheet" href="/frontend/css/layout.css">
+  <link rel="stylesheet" href="/frontend/css/components.css">
+</head>
+<body>
+  <div id="app" class="app" hidden>
+    <!-- ---------------------------------------------------------- menubar -->
+    <header class="menubar">
+      <a class="brand" href="#" id="brand-home" title="Project browser">
+        <img src="/assets/icon.svg" alt="" width="22" height="22">
+        <span>Tiley</span>
+      </a>
+      <nav class="menus" id="menubar-menus" aria-label="Main menu"></nav>
+      <div class="menubar-right">
+        <span class="project-title" id="menubar-project-name">No project</span>
+        <span class="save-status" id="save-status" role="status" aria-live="polite">
+          <span class="save-dot" aria-hidden="true"></span><span class="save-text">Saved</span>
+        </span>
+      </div>
+    </header>
+
+    <!-- -------------------------------------------------------- workspace -->
+    <main class="workspace">
+      <aside class="panel panel-left" id="project-panel" aria-label="Project maps">
+        <div class="panel-header">
+          <h2>Maps</h2>
+          <button type="button" class="icon-button" id="add-map-button" title="New map (adds a map to this project)" aria-label="New map">+</button>
+        </div>
+        <ul class="map-list" id="map-list"></ul>
+
+        <div class="panel-header">
+          <h2>Map settings</h2>
+        </div>
+        <div class="panel-body" id="map-settings"></div>
+      </aside>
+
+      <section class="canvas-area" id="canvas-area">
+        <canvas id="map-canvas" tabindex="0" aria-label="Tilemap canvas"></canvas>
+        <div class="zoom-controls">
+          <button type="button" class="icon-button" data-zoom="out" title="Zoom out (-)" aria-label="Zoom out">&minus;</button>
+          <button type="button" class="zoom-readout" id="zoom-readout" title="Reset zoom to 100% (Ctrl/Cmd + 0)">100%</button>
+          <button type="button" class="icon-button" data-zoom="in" title="Zoom in (+)" aria-label="Zoom in">+</button>
+          <button type="button" class="icon-button" data-zoom="fit" title="Fit map to screen (Shift + F)" aria-label="Fit to screen">⤢</button>
+          <button type="button" class="icon-button" data-zoom="center" title="Center the map" aria-label="Center map">◎</button>
+        </div>
+      </section>
+
+      <aside class="panel panel-right" id="palette-panel" aria-label="Tile palette">
+        <div class="panel-header">
+          <h2>Tile palette</h2>
+          <button type="button" class="icon-button" id="add-tile-button" title="Add a tile to this dictionary" aria-label="Add tile">+</button>
+        </div>
+        <div class="palette-controls">
+          <label class="field">
+            <span class="field-label">Dictionary</span>
+            <select id="dictionary-select"></select>
+          </label>
+          <div class="palette-row">
+            <label class="field grow">
+              <span class="field-label">Search tiles</span>
+              <input type="search" id="tile-search" placeholder="Name, ID or tag" autocomplete="off">
+            </label>
+            <label class="field">
+              <span class="field-label">Sort</span>
+              <select id="tile-sort">
+                <option value="id-asc">ID &uarr;</option>
+                <option value="id-desc">ID &darr;</option>
+                <option value="name-asc">Name A&ndash;Z</option>
+                <option value="name-desc">Name Z&ndash;A</option>
+              </select>
+            </label>
+          </div>
+          <div class="tag-filter" id="tag-filter"></div>
+        </div>
+        <div class="palette-grid" id="palette-grid" role="listbox" aria-label="Tiles"></div>
+        <div class="palette-footer">
+          <label class="field">
+            <span class="field-label">Thumbnail size <output id="thumb-size-value">48</output>px</span>
+            <input type="range" id="thumb-size" min="24" max="128" step="4" value="48">
+          </label>
+          <div class="palette-actions">
+            <button type="button" class="button small" id="manage-dictionaries-button">Manage dictionaries</button>
+            <button type="button" class="button small" id="missing-tiles-button" hidden>Resolve missing tiles</button>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- ---------------------------------------------------------- toolbar -->
+    <div class="toolbar" id="toolbar" role="toolbar" aria-label="Editing tools"></div>
+
+    <!-- -------------------------------------------------------- statusbar -->
+    <footer class="statusbar" id="statusbar">
+      <span class="status-item" id="status-map">Map: &mdash;</span>
+      <span class="status-item" id="status-size">Size: &mdash;</span>
+      <span class="status-item" id="status-tiles">Tiles: &mdash;</span>
+      <span class="status-item" id="status-selected">Selected tile: &mdash;</span>
+      <span class="status-item" id="status-cursor">Cursor: &mdash;</span>
+      <span class="status-item" id="status-under">Tile under cursor: &mdash;</span>
+      <span class="status-item" id="status-selection" hidden>Selection: &mdash;</span>
+      <span class="status-item status-right" id="status-zoom">Zoom: 100%</span>
+    </footer>
+  </div>
+
+  <!-- ----------------------------------------------------- welcome screen -->
+  <div id="welcome" class="welcome" hidden>
+    <div class="welcome-inner">
+      <header class="welcome-header">
+        <img src="/assets/icon.svg" alt="" width="56" height="56">
+        <div>
+          <h1>Tiley</h1>
+          <p class="muted">A numerical tilemap editor for 2D games.</p>
+        </div>
+        <div class="welcome-actions">
+          <button type="button" class="button primary" id="welcome-new">New project</button>
+          <button type="button" class="button" id="welcome-import">Import project&hellip;</button>
+          <button type="button" class="button" id="welcome-dictionaries">Tile dictionaries</button>
+          <button type="button" class="button" id="welcome-settings">Settings</button>
+        </div>
+      </header>
+
+      <section class="welcome-section" id="recents-section">
+        <h2>Recent projects</h2>
+        <div class="card-grid" id="recents-grid"></div>
+      </section>
+
+      <section class="welcome-section">
+        <div class="welcome-section-header">
+          <h2>All projects</h2>
+          <label class="field">
+            <span class="visually-hidden">Search projects</span>
+            <input type="search" id="project-search" placeholder="Search projects" autocomplete="off">
+          </label>
+        </div>
+        <div class="card-grid" id="projects-grid"></div>
+        <p class="empty-state" id="projects-empty" hidden>
+          <strong>No projects yet.</strong>
+          Create your first project to get started, or import an existing map.
+        </p>
+      </section>
+    </div>
+  </div>
+
+  <div id="loading" class="loading">Loading Tiley&hellip;</div>
+  <div id="modal-root"></div>
+  <div id="context-menu-root"></div>
+  <div id="toast-root" class="toast-root" role="status" aria-live="polite"></div>
+
+  <script type="module" src="/frontend/js/main.js"></script>
+  <noscript>
+    <p style="padding:2rem;font-family:system-ui">Tiley needs JavaScript enabled to run.</p>
+  </noscript>
+</body>
+</html>
