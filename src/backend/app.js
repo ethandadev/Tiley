@@ -13,6 +13,7 @@ import { dictionariesRouter } from './routes/dictionaries.js';
 import { assetsRouter } from './routes/assets.js';
 import { settingsRouter } from './routes/settings.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+import { createSeo } from './seo.js';
 
 /**
  * Large maps produce large documents: a 1000 x 1000 map is roughly 4 MB of
@@ -20,9 +21,17 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
  */
 const JSON_BODY_LIMIT = '96mb';
 
-export async function createApp() {
+/**
+ * Static files are revalidated after an hour. No build step fingerprints the
+ * file names, so a long immutable cache would serve stale code after an update.
+ */
+const STATIC_MAX_AGE = '1h';
+
+export async function createApp(options = {}) {
   await ensureDataDirectories();
+  const seo = await createSeo('publicUrl' in options ? { publicUrl: options.publicUrl } : {});
   const app = express();
+  app.locals.publicUrl = seo.publicUrl;
 
   app.disable('x-powered-by');
   app.use(express.json({ limit: JSON_BODY_LIMIT }));
@@ -55,6 +64,7 @@ export async function createApp() {
   // stored file can never be interpreted as an executable document.
   app.use('/assets', express.static(ASSETS_DIR, {
     index: false,
+    maxAge: STATIC_MAX_AGE,
     dotfiles: 'deny',
     setHeaders(response) {
       response.setHeader('Content-Disposition', 'inline');
@@ -67,10 +77,27 @@ export async function createApp() {
    * way in the browser as it does on disk. That is what lets the Node test
    * suite import the very modules the editor runs.
    */
-  app.use('/shared', express.static(SHARED_DIR, { index: false, dotfiles: 'deny' }));
-  app.use('/frontend', express.static(FRONTEND_DIR, { index: false, dotfiles: 'deny' }));
-  app.get('/', (_request, response) => {
-    response.sendFile(path.join(FRONTEND_DIR, 'index.html'));
+  app.use('/shared', express.static(SHARED_DIR, { index: false, dotfiles: 'deny', maxAge: STATIC_MAX_AGE }));
+  app.use('/frontend', express.static(FRONTEND_DIR, { index: false, dotfiles: 'deny', maxAge: STATIC_MAX_AGE }));
+
+  // The page itself is rendered once at start-up with the deployment's
+  // canonical URL and robots policy (see seo.js).
+  app.get(['/', '/index.html'], (_request, response) => {
+    response.setHeader('Cache-Control', 'no-cache');
+    response.type('html').send(seo.indexHtml);
+  });
+  app.get('/robots.txt', (_request, response) => {
+    response.type('text/plain').send(seo.robotsTxt);
+  });
+  app.get('/sitemap.xml', (_request, response) => {
+    if (!seo.sitemapXml) {
+      response.status(404).type('text/plain').send('No sitemap: PUBLIC_URL is not configured.');
+      return;
+    }
+    response.type('application/xml').send(seo.sitemapXml);
+  });
+  app.get('/site.webmanifest', (_request, response) => {
+    response.type('application/manifest+json').sendFile(path.join(FRONTEND_DIR, 'site.webmanifest'));
   });
 
   app.use(errorHandler);

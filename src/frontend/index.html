@@ -3,8 +3,69 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tiley — Tilemap Editor</title>
+
+  <!--
+    SEO. Lines containing {{PUBLIC_URL}} are rendered by the server
+    (src/backend/seo.js): with PUBLIC_URL set they become absolute URLs,
+    without it they are removed, because canonical and Open Graph URLs must be
+    absolute and must not point at a guessed domain.
+  -->
+  <title>Tiley — Free Tilemap Editor for 2D Games (TXT, CSV, JSON Export)</title>
+  <meta name="description" content="Free tilemap editor for 2D games. Paint tile maps visually, reuse tile sets, and export numeric maps as TXT, CSV, JSON or PNG for any game engine.">
+  <meta name="robots" content="{{ROBOTS}}">
+  <meta name="application-name" content="Tiley">
+  <meta name="theme-color" content="#141822">
+  <link rel="canonical" href="{{PUBLIC_URL}}/">
+
   <link rel="icon" type="image/svg+xml" href="/assets/icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- Open Graph / social previews -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tiley">
+  <meta property="og:title" content="Tiley — Free Tilemap Editor for 2D Games">
+  <meta property="og:description" content="Paint tile maps visually and export clean numeric maps as TXT, CSV, JSON or PNG for any game engine.">
+  <meta property="og:url" content="{{PUBLIC_URL}}/">
+  <meta property="og:image" content="{{PUBLIC_URL}}/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Tiley, a numerical tilemap editor for 2D games">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tiley — Free Tilemap Editor for 2D Games">
+  <meta name="twitter:description" content="Paint tile maps visually and export clean numeric maps as TXT, CSV, JSON or PNG.">
+  <meta name="twitter:image" content="{{PUBLIC_URL}}/assets/og-image.png">
+
+  <!-- Structured data: a data block, not a script, so the CSP does not apply. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Tiley",
+    "alternateName": "Tiley Tilemap Editor",
+    "applicationCategory": "DeveloperApplication",
+    "applicationSubCategory": "Game development tool",
+    "operatingSystem": "Windows, macOS, Linux (runs in any modern browser)",
+    "description": "A numerical tilemap editor for 2D games. Paint tile maps visually, manage reusable tile dictionaries, and export maps as TXT, CSV, JSON or PNG.",
+    "softwareVersion": "{{VERSION}}",
+    "license": "https://opensource.org/licenses/MIT",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "Paint tile maps with pencil, fill, line, rectangle, eyedropper and selection tools",
+      "Reusable tile dictionaries shared across maps and projects",
+      "Multiple maps per project",
+      "Export to TXT, CSV, JSON and PNG",
+      "Import TXT, CSV and JSON tilemaps",
+      "Undo and redo, autosave and crash recovery",
+      "Handles maps of 1000 by 1000 tiles"
+    ],
+    "image": "{{PUBLIC_URL}}/assets/og-image.png",
+    "url": "{{PUBLIC_URL}}/"
+  }
+  </script>
+
   <link rel="stylesheet" href="/frontend/css/theme.css">
   <link rel="stylesheet" href="/frontend/css/layout.css">
   <link rel="stylesheet" href="/frontend/css/components.css">
@@ -116,7 +177,7 @@
         <img src="/assets/icon.svg" alt="" width="56" height="56">
         <div>
           <h1>Tiley</h1>
-          <p class="muted">A numerical tilemap editor for 2D games.</p>
+          <p class="muted">A free tilemap editor for 2D games. Paint maps with your tiles, then export clean numeric maps as TXT, CSV, JSON or PNG.</p>
         </div>
         <div class="welcome-actions">
           <button type="button" class="button primary" id="welcome-new">New project</button>
@@ -155,7 +216,19 @@
 
   <script type="module" src="/frontend/js/main.js"></script>
   <noscript>
-    <p style="padding:2rem;font-family:system-ui">Tiley needs JavaScript enabled to run.</p>
+    <main style="max-width:720px;margin:0 auto;padding:2rem;font-family:system-ui;color:#e6e9f2;background:#0d1017">
+      <h1>Tiley — tilemap editor for 2D games</h1>
+      <p>Tiley lets you paint tile maps visually while keeping a plain grid of numbers as the map data, so your export is exactly what your game engine reads.</p>
+      <h2>Features</h2>
+      <ul>
+        <li>Pencil, fill, line, rectangle, eyedropper and selection tools</li>
+        <li>Reusable tile dictionaries shared between maps and projects</li>
+        <li>Multiple maps per project, with undo, autosave and crash recovery</li>
+        <li>Export to TXT, CSV, JSON and PNG; import TXT, CSV and JSON</li>
+        <li>Stays fast on maps of 1000 by 1000 tiles</li>
+      </ul>
+      <p><strong>Tiley needs JavaScript enabled to run.</strong></p>
+    </main>
   </noscript>
 </body>
 </html>

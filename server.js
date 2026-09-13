@@ -12,7 +12,8 @@ const HOST = process.env.HOST || '127.0.0.1';
 const app = await createApp();
 
 const server = app.listen(PORT, HOST, () => {
-  console.log(`\n  Tiley is running at http://${HOST}:${PORT}\n`);
+  console.log(`\n  Tiley is running at http://${HOST}:${PORT}`);
+  console.log(`  Canonical URL: ${app.locals.publicUrl ?? 'none (search engines asked not to index)'}\n`);
 });
 
 server.on('error', (error) => {

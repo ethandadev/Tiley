@@ -1,6 +1,12 @@
 node_modules/
+.DS_Store
+*.log
+
+# Editor data lives on each machine and must never travel through git:
+# a `git pull` on the server would otherwise overwrite its projects,
+# dictionaries and uploads with whatever was on the laptop.
 projects/*/
 assets/tiles/
 data/settings.json
-.DS_Store
-*.log
+data/recents.json
+data/dictionaries/

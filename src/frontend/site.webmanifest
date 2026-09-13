@@ -1,0 +1,16 @@
+{
+  "name": "Tiley — Tilemap Editor",
+  "short_name": "Tiley",
+  "description": "A numerical tilemap editor for 2D games. Paint maps visually and export them as TXT, CSV, JSON or PNG.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0d1017",
+  "theme_color": "#141822",
+  "categories": ["developer", "games", "productivity"],
+  "icons": [
+    { "src": "/assets/icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -33,6 +33,7 @@ everything as readable JSON on your own disk.
 - [Development](#development)
 - [Testing](#testing)
 - [Production deployment](#production-deployment)
+- [Search engines and social previews](#search-engines-and-social-previews)
 - [Security notes](#security-notes)
 - [Troubleshooting](#troubleshooting)
 
@@ -531,6 +532,30 @@ Restart=on-failure
 If you expose it beyond your own machine, put it behind a reverse proxy that
 provides TLS **and** authentication, and back up `projects/`, `data/` and
 `assets/` — they are the whole application state.
+
+## Search engines and social previews
+
+The page ships with a keyword-focused title and description, Open Graph and
+Twitter card tags, a 1200 × 630 share image (`assets/og-image.png`),
+`SoftwareApplication` structured data, a web app manifest, `robots.txt` and
+`sitemap.xml`.
+
+Anything that needs an absolute URL is rendered by the server at start-up from:
+
+1. the `PUBLIC_URL` environment variable, if set;
+2. otherwise `homepage` in `package.json` — `https://tiley.ethandadev.com`.
+
+```bash
+PUBLIC_URL=https://tiles.example.com npm start   # self-host under another domain
+PUBLIC_URL=none npm start                         # private copy: noindex, no sitemap
+```
+
+The start-up log prints the canonical URL in use. Because the page is rendered
+once when the server starts, **restart the Node process after pulling changes**
+to `index.html` or `package.json`.
+
+After deploying, submit `https://tiley.ethandadev.com/sitemap.xml` in
+Google Search Console and Bing Webmaster Tools.
 
 ## Security notes
 
